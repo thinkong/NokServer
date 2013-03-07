@@ -1,9 +1,8 @@
 CMAKE_MINIMUM_REQUIRED( VERSION 2.8 )
 
 PROJECT( NokServer )
-
+set (Boost_USE_STATIC_LIBS TRUE)
 ADD_SUBDIRECTORY( Serverlib )
-INCLUDE_DIRECTORIES( ./ServerLib )
 
 find_package(Boost COMPONENTS system REQUIRED)
 if (Boost_FOUND)
