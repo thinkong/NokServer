@@ -2,18 +2,32 @@ CMAKE_MINIMUM_REQUIRED( VERSION 2.8 )
 
 SET(CMAKE_CXX_FLAGS	"-std=c++11 ${CMAKE_CXX_FLAGS}")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
-
+#set (Boost_DEBUG 1)
 PROJECT( NokServer )
 set (Boost_USE_STATIC_LIBS TRUE)
+set (Boost_USE_STATIC_RUNTIME TRUE)
+ADD_DEFINITIONS( -DBOOST_ALL_NO_LIB )
 ADD_SUBDIRECTORY( Serverlib )
 
 
-find_package(Boost COMPONENTS system thread REQUIRED)
+find_package(Boost COMPONENTS system thread atomic REQUIRED)
 if (Boost_FOUND)
 	MESSAGE("Boost Found" )
 	MESSAGE(${Boost_INCLUDE_DIR})
 	INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
 ENDIF()
+
+if(MSVC)
+#We statically link to reduce dependancies
+foreach(flag_var CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO)
+    if(${flag_var} MATCHES "/MD")
+        string(REGEX REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
+    endif(${flag_var} MATCHES "/MD")
+    if(${flag_var} MATCHES "/MDd")
+        string(REGEX REPLACE "/MDd" "/MTd" ${flag_var} "${${flag_var}}")
+    endif(${flag_var} MATCHES "/MDd")
+endforeach(flag_var)
+endif(MSVC)
 
 ADD_EXECUTABLE(server main.cpp)
 TARGET_LINK_LIBRARIES( server ${Boost_LIBRARIES})
