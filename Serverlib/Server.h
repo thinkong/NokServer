@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Serverlib.h"
 
 using boost::asio::ip::tcp;
 namespace Serverlib
