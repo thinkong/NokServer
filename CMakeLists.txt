@@ -1,10 +1,14 @@
 CMAKE_MINIMUM_REQUIRED( VERSION 2.8 )
 
+SET(CMAKE_CXX_FLAGS	"-std=c++11 ${CMAKE_CXX_FLAGS}")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+
 PROJECT( NokServer )
 set (Boost_USE_STATIC_LIBS TRUE)
 ADD_SUBDIRECTORY( Serverlib )
 
-find_package(Boost COMPONENTS system REQUIRED)
+
+find_package(Boost COMPONENTS system thread REQUIRED)
 if (Boost_FOUND)
 	MESSAGE("Boost Found" )
 	MESSAGE(${Boost_INCLUDE_DIR})
@@ -13,3 +17,4 @@ ENDIF()
 
 ADD_EXECUTABLE(server main.cpp)
 TARGET_LINK_LIBRARIES( server ${Boost_LIBRARIES})
+#target_link_libraries (server ${CMAKE_THREAD_LIBS_INIT})

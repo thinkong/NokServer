@@ -1,6 +1,9 @@
 # CmakeLists.txt in Hello dir
 # Adds a library called Hello (libHello.a under Linux) from the source file hello.cc
 
+SET(CMAKE_CXX_FLAGS	"-std=c++11 ${CMAKE_CXX_FLAGS}")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+
 file(GLOB_RECURSE SERVERLIB_SRCS
 		RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
          ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp
@@ -9,7 +12,7 @@ file(GLOB_RECURSE SERVERLIB_SRCS
 
 find_package(Boost COMPONENTS system REQUIRED)
 if (Boost_FOUND)
-	MESSAGE("Boost Found" )
+	#MESSAGE("Boost Found" )
 	MESSAGE(${Boost_INCLUDE_DIR})
 	INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
 ENDIF()
